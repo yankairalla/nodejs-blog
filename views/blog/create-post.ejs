@@ -1,0 +1,60 @@
+<%- include('../inc/head.ejs') %> <%- include('../inc/header.ejs' ) %>
+<style>
+  .ck-editor__editable_inline {
+    min-height: 300px;
+  }
+</style>
+
+<h2>Create a Post</h2>
+<% if(errorMessage) { %>
+  <div class="alert alert-danger" role="alert">
+      <%= errorMessage %>
+    </div>
+    <% } %>
+<form
+  role="form"
+  method="post"
+  action="/<% if(!editMode) { %>create-post <% } else { %>edit-post <% } %>"
+>
+  <div class="form-group">
+    <label for="title">Title</label>
+    <input
+      type="title"
+      class="form-control"
+      name="title"
+      id="title"
+      value="<% if(editMode || hasError) { %><%= post.title %><% } %>"
+    />
+  </div>
+  <div class="form-group">
+    <label for="imageUrl">Image Url: </label>
+    <input
+      name="imageUrl"
+      rows="12"
+      class="form-control"
+      value="<% if(editMode || hasError) { %><%= post.imageUrl %><% } %>"
+    />
+  </div>
+  <div class="form-group">
+    <label for="txtBody">Body: </label>
+    <textarea id="editor" name="content" rows="12" class="form-control">
+             <% if(editMode || hasError) { %><%= post.content %><% } %>
+            </textarea>
+  </div>
+
+  <% if(editMode) { %>
+    <input type="hidden" name="postId" value="<%= post._id %>">
+    <% } %>
+  <input class="btn btn-primary" type="submit" value="Submit" />
+</form>
+<script src="https://cdn.ckeditor.com/ckeditor5/12.3.1/classic/ckeditor.js"></script>
+<script>
+  ClassicEditor.create(document.querySelector("#editor"))
+    .then(editor => {
+      window.editor = editor;
+    })
+    .catch(err => {
+      console.error(err.stack);
+    });
+</script>
+<%- include('../inc/end.ejs' ) %>

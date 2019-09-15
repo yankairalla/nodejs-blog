@@ -1,0 +1,38 @@
+<%- include('../inc/head.ejs') %> <%- include('../inc/header.ejs') %> <%
+if(posts.length > 0) { %>
+<div class="row">
+  <% for(let post of posts) { %>
+  <a href="/post/<%=post._id %>">
+    <div class="col-md-4">
+      <div class="card mb-4 box-shadow">
+        <img
+          style="max-height: 200px;"
+          class="card-img-top"
+          alt="Card image cap"
+          src="<%= post.imageUrl ? post.imageUrl : 'https://www.hopkinsmedicine.org/-/media/feature/noimageavailable.ashx' %>"
+        />
+        <div class="card-body">
+          <h5 class="card-title"><%= post.title %></h5>
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="btn-group">
+              <button type="button" class="btn btn-sm btn-outline-secondary">
+                View
+              </button>
+              <a
+                class="btn btn-sm btn-outline-secondary"
+                href="/edit-post/<%= post._id %>?edit=true"
+                >Edit</a
+              >
+            </div>
+            <small class="text-muted">9 mins</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </a>
+
+  <% } %>
+</div>
+<% } else { %>
+<h1>Post Vazio!</h1>
+<% } %> <%- include('../inc/end.ejs') %>

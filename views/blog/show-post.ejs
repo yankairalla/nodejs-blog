@@ -1,0 +1,16 @@
+<%- include('../inc/head.ejs') %>
+
+<%- include('../inc/header.ejs') %>
+    <a href="/" class="btn btn-primary">Voltar</a>
+    <h1><%=post.title %></h1>
+    <img style="width: 100%" src="
+    <%=post.imageUrl %>" alt="">
+
+    <div><%-post.content %></div>
+    <small>Escrito por <%=post.userId.name %></small>
+    
+
+
+
+        
+<%- include('../inc/end.ejs')  %>
