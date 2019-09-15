@@ -15,6 +15,7 @@
   role="form"
   method="post"
   action="/<% if(!editMode) { %>create-post <% } else { %>edit-post <% } %>"
+  enctype="multipart/form-data"
 >
   <div class="form-group">
     <label for="title">Title</label>
@@ -27,12 +28,11 @@
     />
   </div>
   <div class="form-group">
-    <label for="imageUrl">Image Url: </label>
+    <label for="image">Image: </label>
     <input
-      name="imageUrl"
-      rows="12"
+    type="file"
+      name="image"
       class="form-control"
-      value="<% if(editMode || hasError) { %><%= post.imageUrl %><% } %>"
     />
   </div>
   <div class="form-group">

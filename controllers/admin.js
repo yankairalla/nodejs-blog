@@ -1,4 +1,5 @@
 const { validationResult } = require('express-validator');
+const fileHelper = require('../util/file');
 
 const Post = require('../models/post');
 
@@ -14,22 +15,38 @@ exports.addPost = (req, res, next) => {
 exports.postAddPost = (req, res, next) => {
   const title = req.body.title;
   const content = req.body.content;
-  const imageUrl = req.body.imageUrl;
+  const image = req.file;
   const errors = validationResult(req);
-
-  if (!errors.isEmpty()) {
-   return res.status(422).render('blog/create-post', {
+  console.log(image);
+  if (!image) {
+    return res.status(422).render('blog/create-post', {
       title: 'Edit Post',
       editMode: false,
       hasError: true,
       post: {
         title,
-        imageUrl,
+        image,
+        content
+      },
+      errorMessage: 'Arquivo anexado não é uma imagem!'
+    });
+  }
+
+  if (!errors.isEmpty()) {
+    return res.status(422).render('blog/create-post', {
+      title: 'Edit Post',
+      editMode: false,
+      hasError: true,
+      post: {
+        title,
+        image,
         content
       },
       errorMessage: errors.array()[0].msg
     });
   }
+  const imageUrl = image.path;
+
   const post = new Post({
     title,
     imageUrl,
@@ -75,21 +92,21 @@ exports.getEditPost = (req, res, next) => {
 
 exports.postEditPost = (req, res, next) => {
   const updatedTitle = req.body.title;
-  const updatedImageUrl = req.body.imageUrl;
+  const image = req.file;
   const updatedContent = req.body.content;
   const postId = req.body.postId;
 
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-   return res.status(422).render('blog/create-post', {
+    return res.status(422).render('blog/create-post', {
       title: 'Edit Post',
       editMode: true,
       hasError: true,
       post: {
         title: updatedTitle,
         imageUrl: updatedImageUrl,
-        content: updatedContent, 
+        content: updatedContent
       },
       errorMessage: errors.array()[0].msg
     });
@@ -100,8 +117,11 @@ exports.postEditPost = (req, res, next) => {
         return res.redirect('/');
       }
       post.title = updatedTitle;
-      post.imageUrl = updatedImageUrl;
       post.content = updatedContent;
+      if (image) {
+        fileHelper.deleteFile(post.imageUrl);
+        product.imageUrl = image.path;
+      }
 
       return post.save().then(() => {
         console.log('product updated!');

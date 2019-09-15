@@ -24,7 +24,6 @@ router.post(
     )
       .isLength({ min: 3, max: 30 })
       .trim(),
-    body('imageUrl', 'Não e uma URL valida.').isURL(),
     body('content')
       .isLength({ min: 5, max: 500 })
       .trim()
@@ -45,7 +44,6 @@ router.post(
       .isAlphanumeric()
       .isLength({ min: 3, max: 30 })
       .trim(),
-    body('imageUrl', 'Não e uma URL valida.').isURL(),
     body('content', 'No minimo 5 e no maximo 500 caracteres.')
       .isLength({ min: 5, max: 500 })
       .trim()
